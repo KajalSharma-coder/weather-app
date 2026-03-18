@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Weather Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  </head>
+  <body class="page-wrapper">
+    <nav class="navbar">
+      <h2>Weather Dashboard</h2>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="About.html">About</a></li>
+        <li><a href="Contact.html">Contact</a></li>
+      </ul>
+    </nav>
+    <div class="container mx-auto p-6 flex-grow">
+      <div class="flex justify-center gap-3 mb-8">
+        <input
+          id="city"
+          type="text"
+          placeholder="Enter city"
+          class="p-3 rounded-lg w-64"
+        />
+        <button onclick="getWeather()" class="btn-primary">Search</button>
+        <button onclick="getLocationWeather()" class="btn-location">
+          📍 My Location
+        </button>
+      </div>
+      <div id="loading" class="loading hidden">Loading weather data...</div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="weather-card p-6 text-center">
+          <h2 id="cityName" class="text-2xl font-bold"></h2>
+          <img id="icon" class="mx-auto" />
+          <p id="temp"></p>
+          <p id="desc"></p>
+          <p id="humidity"></p>
+          <p id="wind"></p>
+        </div>
+        
+        <div class="weather-card p-6">
+          <h3 class="text-xl font-bold mb-4">Recent Searches</h3>
+          <ul id="historyList"></ul>
+          <button
+            onclick="clearHistory()"
+            class="mt-3 bg-red-500 px-4 py-2 rounded-lg hover:bg-red-600"
+          >
+            Clear History
+          </button>
+        </div>
+      </div>
+      
+      <h2 class="text-white text-2xl mt-10 mb-4">5 Day Forecast</h2>
+      <div id="forecast" class="forecast-container"></div>
+      <div class="weather-card mt-10 p-6">
+        <h2 class="text-xl font-bold mb-4">Temperature Trend</h2>
+        <canvas id="tempChart"></canvas>
+      </div>
+       <div id="map" style="height: 300px; margin-top: 20px;"></div>
+    </div>
+   
+    <footer class="footer">
+      <div class="footer-container">
+        <div class="footer-col">
+          <h3>Weather Dashboard</h3>
+          <p>
+            Real-time weather dashboard with forecast, charts and GPS based
+            weather detection.
+          </p>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Forecast.html">Forecast</a></li>
+            <li><a href="About.html">About</a></li>
+            <li><a href="Contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Technologies</h3>
+          <ul>
+            <li>HTML</li>
+            <li>CSS</li>
+            <li>JavaScript</li>
+            <li>Chart.js</li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Developer</h3>
+          <p>Kajal Sharma</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>© 2026 Weather Dashboard | By Kajal Sharma</p>
+      </div>
+    </footer>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+  </body>
+</html>

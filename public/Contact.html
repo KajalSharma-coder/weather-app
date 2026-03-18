@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<link rel="stylesheet" href="style.css">
+
+<title>Contact</title>
+
+</head>
+
+<body class="page-wrapper">
+
+<nav class="navbar">
+
+<h2>Weather Dashboard</h2>
+
+<ul class="nav-links">
+
+<li><a href="index.html">Home</a></li>
+<li><a href="About.html">About</a></li>
+<li><a href="Contact.html">Contact</a></li>
+
+</ul>
+
+</nav>
+
+<div class="weather-card p-10 m-10 text-center flex-grow">
+
+<h2 class="text-3xl font-bold mb-6">Contact Me</h2>
+
+<form class="contact-form flex flex-col gap-4 w-full max-w-md mx-auto">
+  <input type="text" name="name" placeholder="Your Name" class="p-2 rounded border border-gray-300" required>
+  <input type="email" name="email" placeholder="Your Email" class="p-2 rounded border border-gray-300" required>
+  <textarea name="message" rows="5" placeholder="Your Message" class="p-2 rounded border border-gray-300" required></textarea>
+  <button type="submit" class="bg-orange-500 text-white p-2 rounded hover:bg-orange-600">Send Message</button>
+</form>
+
+</div>
+
+<footer class="footer">
+
+<div class="footer-bottom">
+
+<p>© 2026 Weather Dashboard</p>
+
+</div>
+
+</footer>
+<script>
+const form = document.querySelector(".contact-form");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const data = {
+        name: form.name.value,
+        email: form.email.value,
+        message: form.message.value
+    };
+
+    try {
+        const res = await fetch("/api/contact", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        });
+
+        const result = await res.json();
+        alert(result.message);
+
+        if(res.ok) form.reset();
+
+    } catch(err) {
+        alert("Error sending message! Check console.");
+        console.error(err);
+    }
+});
+</script>
+</body>
+</html>
