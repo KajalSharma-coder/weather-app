@@ -1,4 +1,5 @@
 const API_KEY = "246c5972d37205572b347da61dfc82fa";
+
 let chart;
 let map;
 let marker;
@@ -13,22 +14,18 @@ async function getWeather(cityParam) {
       return;
     }
 
-   const res = await fetch("http://localhost:5000/api/contact", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-});
+    const res = await fetch(`http://localhost:5000/weather/${city}`);
     const data = await res.json();
 
     if (data.cod != 200) {
       alert("City not found");
       return;
     }
-    
 
     // Save last city
     localStorage.setItem("lastCity", city);
 
+    // UI update
     document.getElementById("cityName").innerText = data.name;
     document.getElementById("temp").innerText = "🌡 " + data.main.temp + " °C";
     document.getElementById("desc").innerText =
@@ -43,10 +40,15 @@ async function getWeather(cityParam) {
 
     saveSearch(city);
     changeBackground(data.weather[0].main.toLowerCase());
+
+    // ✅ Show Map
     showMap(data.coord.lat, data.coord.lon);
 
+    // ✅ Forecast
     getForecast(city);
+
   } catch (error) {
+    console.error(error);
     alert("Error fetching weather");
   }
 }
@@ -138,6 +140,8 @@ function showHistory() {
     list.appendChild(li);
   });
 }
+
+// ❌ Clear history
 function clearHistory() {
   if (confirm("Clear all search history?")) {
     localStorage.removeItem("history");
@@ -155,15 +159,12 @@ function changeBackground(weather) {
     body.style.background = "linear-gradient(120deg,#3a7bd5,#3a6073)";
   else if (weather.includes("clear"))
     body.style.background = "linear-gradient(120deg,#f6d365,#fda085)";
-  else body.style.background = "linear-gradient(120deg,#4facfe,#00f2fe)";
+  else
+    body.style.background = "linear-gradient(120deg,#4facfe,#00f2fe)";
 }
 
-// Load history on start
-showHistory();
-
-// 📍 Get weather by location
+// 📍 Get location weather
 function getLocationWeather() {
-
   if (!navigator.geolocation) {
     alert("Geolocation not supported");
     return;
@@ -176,7 +177,7 @@ function getLocationWeather() {
 
       try {
         let res = await fetch(
-          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`,
+          `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${API_KEY}`
         );
 
         let data = await res.json();
@@ -186,12 +187,12 @@ function getLocationWeather() {
           return;
         }
 
-        // UI update
         document.getElementById("cityName").innerText = data.name;
         document.getElementById("temp").innerText =
           "🌡 " + data.main.temp + " °C";
         document.getElementById("desc").innerText =
           "☁ " + data.weather[0].description;
+
         document.getElementById("humidity").innerText =
           "💧 " + data.main.humidity + "%";
         document.getElementById("wind").innerText =
@@ -200,28 +201,31 @@ function getLocationWeather() {
         document.getElementById("icon").src =
           `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`;
 
-        // Save + background + forecast
         saveSearch(data.name);
         changeBackground(data.weather[0].main.toLowerCase());
+
+        // ✅ Map + Forecast
+        showMap(lat, lon);
         getForecast(data.name);
+
       } catch (err) {
         alert("Error getting location weather");
       }
     },
-    (error) => {
+    () => {
       alert("Location permission denied");
-    },
+    }
   );
 }
+
+// 🗺 Show Map
 function showMap(lat, lon) {
-
   if (!map) {
-    map = L.map('map').setView([lat, lon], 10);
+    map = L.map("map").setView([lat, lon], 10);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap'
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap",
     }).addTo(map);
-
   } else {
     map.setView([lat, lon], 10);
   }
@@ -230,10 +234,11 @@ function showMap(lat, lon) {
     marker.remove();
   }
 
-  marker = L.marker([lat, lon]).addTo(map)
-    .bindPopup("📍 Your Location")
+  marker = L.marker([lat, lon])
+    .addTo(map)
+    .bindPopup("📍 Location")
     .openPopup();
-
-     
 }
- showMap(lat, lon);
+
+// 🔄 Load history on start
+showHistory();
