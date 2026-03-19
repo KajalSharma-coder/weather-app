@@ -64,9 +64,6 @@ weather-app/
 
 ## 🔑 API Configuration
 
-```javascript
-const API_KEY = "246c5972d37205572b347da61dfc82fa";
-
 📸 Screenshots
 
 <img width="1881" height="911" alt="image" src="https://github.com/user-attachments/assets/eca60e72-31f3-4303-b411-7f9729d57999" />
